@@ -1,0 +1,18 @@
+numpy
+scikit_image
+matplotlib
+tqdm
+opencv-python
+easydict
+Pillow
+protobuf<4.21.3
+scikit-image
+PyYAML>=5.3.1
+pandas
+tensorboard
+seaborn
+
+## edage
+coremltools>=4.1
+onnx>=1.9.0
+onnx-simplifier>=0.3.6
