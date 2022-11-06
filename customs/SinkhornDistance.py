@@ -18,20 +18,21 @@ class SinkhornDistance(nn.Module):
         - Input: :math:`(N, P_1, D_1)`, :math:`(N, P_2, D_2)`
         - Output: :math:`(N)` or :math:`()`, depending on `reduction`
     """
-    def __init__(self, eps, max_iter, reduction='none'):
+    def __init__(self, model, eps, max_iter, reduction='none'):
         super(SinkhornDistance, self).__init__()
+        self.device = next(model.parameters()).device
         self.eps = eps
         self.max_iter = max_iter
         self.reduction = reduction
 
-    def forward(self, pred, truth):
+    def forward(self, cost, pred, truth):
         '''
     	We can easily see that the optimal transport corresponds to assigning each point 
     	in the support of pred(x) to the point of truth(y)
     	'''
         x, y = pred, truth
         # The Sinkhorn algorithm takes as input three variables :
-        C = self._cost_matrix(x, y)  # Wasserstein cost function
+        C = cost  # Wasserstein cost function
         x_points = x.shape[-2]
         y_points = y.shape[-2]
         if x.dim() == 2:
@@ -41,9 +42,9 @@ class SinkhornDistance(nn.Module):
 
         # both marginals are fixed with equal weights
         mu = torch.empty(batch_size, x_points, dtype=torch.float,
-                         requires_grad=False).fill_(1.0 / x_points).squeeze()
+                         requires_grad=False, device=self.device).fill_(1.0 / x_points).squeeze()
         nu = torch.empty(batch_size, y_points, dtype=torch.float,
-                         requires_grad=False).fill_(1.0 / y_points).squeeze()
+                         requires_grad=False, device=self.device).fill_(1.0 / y_points).squeeze()
 
         u = torch.zeros_like(mu)
         v = torch.zeros_like(nu)
@@ -75,20 +76,12 @@ class SinkhornDistance(nn.Module):
         elif self.reduction == 'sum':
             cost = cost.sum()
 
-        return cost, pi, C
+        return cost #, pi, C
 
     def M(self, C, u, v):
         "Modified cost for logarithmic updates"
         "$M_{ij} = (-c_{ij} + u_i + v_j) / \epsilon$"
         return (-C + u.unsqueeze(-1) + v.unsqueeze(-2)) / self.eps
-
-    @staticmethod
-    def _cost_matrix(x, y, p=2):
-        "Returns the matrix of $|x_i-y_j|^p$."
-        x_col = x.unsqueeze(-2)
-        y_lin = y.unsqueeze(-3)
-        C = torch.sum((torch.abs(x_col - y_lin)) ** p, -1)
-        return C
 
     @staticmethod
     def ave(u, u1, tau):

@@ -17,7 +17,7 @@ def get_parser():
     parser.add_argument('--epochs', type=int, default=300)
     parser.add_argument('--batch-size', type=int, default=2, help='total batch size for all GPUs')
     parser.add_argument('--img-size', nargs='+', type=int, default=[640, 640], help='[train, test] image sizes')
-    parser.add_argument('--use_cost', default=None, help='Optimal Correction Cost as loss with SinkhornDistance')
+    parser.add_argument('--use_cost', default=False, help='Optimal Correction Cost as loss with SinkhornDistance')
     parser.add_argument('--cost_eps', type=float, default=0.1, help='eps for SinkhornDistance')
     parser.add_argument('--cost_max_iter', type=int, default=100, help='max iteration for SinkhornDistance')
     parser.add_argument('--rect', action='store_true', help='rectangular training')
@@ -62,10 +62,10 @@ def freeze_model_layers(model, freeze):
             v.requires_grad = False
     return model, freeze
     
-def select_loss(model, opt):
+def select_loss(model, opt, device):
     if opt.use_cost:
         from customs.SinkhornDistance import SinkhornDistance
-        sinkhorn = SinkhornDistance(eps=opt.cost_eps, max_iter=opt.cost_max_iter, reduction = 'mean')
+        sinkhorn = SinkhornDistance(model, eps=opt.cost_eps, max_iter=opt.cost_max_iter, reduction='mean').to(device)
         compute_loss_ota = ComputeLossOTA(model, use_cost=True, sinkhorn=sinkhorn)
     else:
         compute_loss_ota = ComputeLossOTA(model, use_cost=None)  # init loss class

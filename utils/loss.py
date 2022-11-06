@@ -287,10 +287,12 @@ class ComputeLossOTA:
         
         if use_cost:
             self.sinkhorn = sinkhorn
+            BCEcls = nn.BCEWithLogitsLoss(pos_weight=torch.tensor([h['cls_pw']], device=device), reduction='none')
+        else:
+            BCEcls = nn.BCEWithLogitsLoss(pos_weight=torch.tensor([h['cls_pw']], device=device))
+        BCEobj = nn.BCEWithLogitsLoss(pos_weight=torch.tensor([h['obj_pw']], device=device))
         self.use_cost = use_cost
         # Define criteria
-        BCEcls = nn.BCEWithLogitsLoss(pos_weight=torch.tensor([h['cls_pw']], device=device))
-        BCEobj = nn.BCEWithLogitsLoss(pos_weight=torch.tensor([h['obj_pw']], device=device))
 
         # Class label smoothing https://arxiv.org/pdf/1902.04103.pdf eqn 3
         self.cp, self.cn = smooth_BCE(eps=h.get('label_smoothing', 0.0))  # positive, negative BCE targets
@@ -332,31 +334,24 @@ class ComputeLossOTA:
                 selected_tbox = targets[i][:, 2:6] * pre_gen_gains[i]
                 selected_tbox[:, :2] -= grid
                 iou = bbox_iou(pbox.T, selected_tbox, x1y1x2y2=False, CIoU=True)  # iou(prediction, target)
-                lbox += (1.0 - iou).mean()  # iou loss
+                lbox += (1.0 - iou).mean() # iou loss
 
                 # Objectness
                 tobj[b, a, gj, gi] = (1.0 - self.gr) + self.gr * iou.detach().clamp(0).type(tobj.dtype)  # iou ratio
                 
-                if self.use_cost:
-                    lbox_cost += self.sinkhorn(pbox.T, selected_tbox)
-                    
                 # Classification
                 selected_tcls = targets[i][:, 1].long()
                 if self.nc > 1:  # cls loss (only if multiple classes)
                     t = torch.full_like(ps[:, 5:], self.cn, device=device)  # targets
                     t[range(n), selected_tcls] = self.cp
-                    lcls += self.BCEcls(ps[:, 5:], t)  # BCE
                     if self.use_cost:
-                        lcls_cost += self.sinkhorn(ps[:, 5:], t)
-
-                # Append targets to text file
-                # with open('targets.txt', 'a') as file:
-                #     [file.write('%11.5g ' * 4 % tuple(x) + '\n') for x in torch.cat((txy[i], twh[i]), 1)]
+                        lcls_cost = self.BCEcls(ps[:, 5:], t)
+                        lcls += self.sinkhorn(cost=lcls_cost.unsqueeze(2), pred=ps[:, 5:].unsqueeze(2), truth=t.unsqueeze(2))
+                    else:
+                        lcls += self.BCEcls(ps[:, 5:], t)  # BCE
 
             obji = self.BCEobj(pi[..., 4], tobj)
             lobj += obji * self.balance[i]  # obj loss
-            if self.use_cost:
-                lobj_cost += self.sinkhorn(pi[..., 4], tobj) * self.balance[i]
             if self.autobalance:
                 self.balance[i] = self.balance[i] * 0.9999 + 0.0001 / obji.detach().item()
 
@@ -366,18 +361,8 @@ class ComputeLossOTA:
         lobj *= self.hyp['obj']
         lcls *= self.hyp['cls']
         bs = tobj.shape[0]  # batch size
-        
-        if self.use_cost:
-            lbox_cost *= self.hyp['box']
-            lobj_cost *= self.hyp['obj']
-            lcls_cost *= self.hyp['cls']
-            cost_loss = lcls_cost + lbox_cost + lobj_cost
-            loss = lbox + lobj + lcls + cost_loss
-            return loss * bs, torch.cat((lbox, lobj, lcls, loss)).detach(), torch.cat((lbox_cos, lobj_cost, lcls_cost, cost_loss)).detach()
-        else:
-            cost_loss = 0
-            loss = lbox + lobj + lcls 
-            return loss * bs, torch.cat((lbox, lobj, lcls, loss)).detach(), cost_loss
+        loss = lbox + lobj + lcls
+        return loss * bs, torch.cat((lbox, lobj, lcls, loss)).detach()
         
     def Sinkhorn_like(self, loss1, loss2, num_gt, topk_pred):
         cost = (loss1 + 3.0 * loss2)
@@ -1102,3 +1087,8 @@ class ComputeLossAuxOTA:
             anch.append(anchors[a])  # anchors
 
         return indices, anch
+
+
+
+
+
