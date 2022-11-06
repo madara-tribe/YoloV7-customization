@@ -15,7 +15,7 @@
 
 <b>to include "class labels" to model</b>
 
-<img src="https://user-images.githubusercontent.com/48679574/200152880-9e9d5557-b2d6-4418-8774-63e96d02dd45.png" width="500" height="300"/>
+<img src="https://user-images.githubusercontent.com/48679574/200152880-9e9d5557-b2d6-4418-8774-63e96d02dd45.png" width="800" height="300"/>
 
 
 ```python
