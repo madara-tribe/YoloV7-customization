@@ -51,4 +51,4 @@ shinkhorn use to only class loss and get bad result. If use Sinkhorn to all loss
 
 # References
 - [CoreML API References of Classifiers](https://coremltools.readme.io/docs/classifiers)
-
+- [Pre-release yolov7](https://github.com/WongKinYiu/yolov7)
