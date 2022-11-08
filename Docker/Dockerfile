@@ -33,11 +33,8 @@ RUN ln -s /usr/local/bin/python3.7 /bin/python3 && \
     ln -s /usr/local/bin/pip3.7 /bin/pip3
 # install pip
 RUN pip3 install --upgrade pip
-
 # CUDA 10.1 https://pytorch.org/get-started/previous-versions/
 RUN pip3 install torch==1.8.1+cu101 torchvision==0.9.1+cu101 torchaudio==0.8.1 -f https://download.pytorch.org/whl/torch_stable.html
-
-#RUN pip3 install torch==1.7.1+cu101 torchvision==0.8.2+cu101 torchaudio==0.7.2 -f https://download.pytorch.org/whl/torch_stable.html
 COPY requirements.txt /tmp/requirements.txt
 RUN pip3 install -r /tmp/requirements.txt
 RUN rm /tmp/requirements.txt
