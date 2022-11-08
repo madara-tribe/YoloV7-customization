@@ -42,7 +42,12 @@ optimize loss matrix(as cost-matrix) by Sinkhorn as follows:
 
 ![Shinhorn](https://user-images.githubusercontent.com/48679574/200572062-b75718c7-11dd-41d0-88e5-11ee40c7bcb7.png)
 
+## Result as F1 curve
 
+<b>yolov7 / yolov7+shinkhorn</b>
+![F1_curve]()
+
+<img src="https://user-images.githubusercontent.com/48679574/200572352-45394070-6054-48d4-8e43-97277f0237fb.png" width="400" height="400"/>
 
 
 
