@@ -37,12 +37,12 @@ ct_model = ct.convert(ts, inputs=[ct.ImageType('image', shape=img.shape, scale=1
            classifier_config=classifier_config)
 ```
 
-## experiment result ： Sinkhorn use for OTA loss
+# experiment result ： Sinkhorn use for OTA loss
 optimize loss matrix(as cost-matrix) by Sinkhorn as follows:
 
 ![Shinhorn](https://user-images.githubusercontent.com/48679574/200572062-b75718c7-11dd-41d0-88e5-11ee40c7bcb7.png)
 
-### Result as F1 curve
+## Result as F1 curve
 shinkhorn use to only class loss and get bad result. If use Sinkhorn to all loss(bbox, obhj, cls), result may become better.
 
 <b>yolov7 / yolov7+shinkhorn</b>
