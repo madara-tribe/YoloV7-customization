@@ -42,14 +42,12 @@ optimize loss matrix(as cost-matrix) by Sinkhorn as follows:
 
 ![Shinhorn](https://user-images.githubusercontent.com/48679574/200572062-b75718c7-11dd-41d0-88e5-11ee40c7bcb7.png)
 
-## Result as F1 curve
+### Result as F1 curve
+shinkhorn use to only class loss and get bad result. If use Sinkhorn to all loss(bbox, obhj, cls), result may become better.
 
 <b>yolov7 / yolov7+shinkhorn</b>
-![F1_curve]()
 
-<img src="https://user-images.githubusercontent.com/48679574/200572352-45394070-6054-48d4-8e43-97277f0237fb.png" width="400" height="400"/>
-
-
+<img src="https://user-images.githubusercontent.com/48679574/200572352-45394070-6054-48d4-8e43-97277f0237fb.png" width="400" height="400"/><img src="https://user-images.githubusercontent.com/48679574/200572872-8aced44b-1b0d-4d79-bb31-52f46c13b306.png" width="400" height="400"/>
 
 # References
 - [CoreML API References of Classifiers](https://coremltools.readme.io/docs/classifiers)
