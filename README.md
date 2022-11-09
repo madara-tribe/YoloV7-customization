@@ -43,7 +43,7 @@ optimize loss matrix(as cost-matrix) by Sinkhorn as follows:
 ![Shinhorn](https://user-images.githubusercontent.com/48679574/200572062-b75718c7-11dd-41d0-88e5-11ee40c7bcb7.png)
 
 ## Result of F1 curve
-shinkhorn use to only <b>"class loss"</b> and get bad result. If use Sinkhorn to all <b>"loss (bbox, object, class)"</b>, result may become better.
+Use shinkhorn to only <b>"class loss"</b> and got bad result. If Sinkhorn is used to all <b>"losses (bbox, object, class)"</b>, result may become better.
 
 <b>yolov7 / yolov7+shinkhorn</b>
 
