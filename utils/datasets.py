@@ -153,7 +153,7 @@ class LoadImages:  # for inference
             self.cap = None
         assert self.nf > 0, f'No images or videos found in {p}. ' \
                             f'Supported formats are:\nimages: {img_formats}\nvideos: {vid_formats}'
-
+        print("imgsize, stride", self.img_size, self.stride)
     def __iter__(self):
         self.count = 0
         return self
@@ -189,11 +189,9 @@ class LoadImages:  # for inference
 
         # Padded resize
         img = letterbox(img0, self.img_size, stride=self.stride)[0]
-
         # Convert
         img = img[:, :, ::-1].transpose(2, 0, 1)  # BGR to RGB, to 3x416x416
         img = np.ascontiguousarray(img)
-
         return path, img, img0, self.cap
 
     def new_video(self, path):
