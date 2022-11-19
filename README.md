@@ -42,12 +42,12 @@ optimize loss matrix(as cost-matrix) by Sinkhorn as follows:
 
 ![Shinhorn](https://user-images.githubusercontent.com/48679574/200572062-b75718c7-11dd-41d0-88e5-11ee40c7bcb7.png)
 
-## Result of F1 curve
-Use shinkhorn to only <b>"class loss"</b> and got bad result. If Sinkhorn is used to all <b>"losses (bbox, object, class)"</b>, result may become better.
+## Result of Confusion Matrix
+Use shinkhorn to only <b>"class loss"</b> and got below result. If Sinkhorn is used to all <b>"losses (bbox, object, class)"</b>, result may become better.
 
 <b>yolov7 / yolov7+shinkhorn</b>
 
-<img src="https://user-images.githubusercontent.com/48679574/200572352-45394070-6054-48d4-8e43-97277f0237fb.png" width="400" height="400"/><img src="https://user-images.githubusercontent.com/48679574/202828080-ac56f7ec-2f42-436e-9261-f7bee6cafd42.png" width="400" height="400"/>
+<img src="https://user-images.githubusercontent.com/48679574/202828143-861f9c40-0072-4646-b627-4dc2a1f22593.png" width="400" height="400"/><img src="https://user-images.githubusercontent.com/48679574/202828151-734c3d50-1a35-4f12-91a0-7b438c4ebe57.png" width="400" height="400"/>
 
 
 # References
