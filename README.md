@@ -47,7 +47,8 @@ Use shinkhorn to only <b>"class loss"</b> and got bad result. If Sinkhorn is use
 
 <b>yolov7 / yolov7+shinkhorn</b>
 
-<img src="https://user-images.githubusercontent.com/48679574/200572352-45394070-6054-48d4-8e43-97277f0237fb.png" width="400" height="400"/><img src="https://user-images.githubusercontent.com/48679574/200572872-8aced44b-1b0d-4d79-bb31-52f46c13b306.png" width="400" height="400"/>
+<img src="https://user-images.githubusercontent.com/48679574/200572352-45394070-6054-48d4-8e43-97277f0237fb.png" width="400" height="400"/><img src="https://user-images.githubusercontent.com/48679574/202828080-ac56f7ec-2f42-436e-9261-f7bee6cafd42.png" width="400" height="400"/>
+
 
 # References
 - [CoreML API References of Classifiers](https://coremltools.readme.io/docs/classifiers)
