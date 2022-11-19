@@ -47,7 +47,7 @@ Use shinkhorn to only <b>"class loss"</b> and had results of almost equal or lit
 
 <b>yolov7 / yolov7+shinkhorn</b>
 
-<img src="https://user-images.githubusercontent.com/48679574/202828143-861f9c40-0072-4646-b627-4dc2a1f22593.png" width="400" height="400"/><img src="https://user-images.githubusercontent.com/48679574/202828151-734c3d50-1a35-4f12-91a0-7b438c4ebe57.png" width="400" height="400"/>
+<img src="https://user-images.githubusercontent.com/48679574/202828143-861f9c40-0072-4646-b627-4dc2a1f22593.png" width="500" height="400"/><img src="https://user-images.githubusercontent.com/48679574/202828151-734c3d50-1a35-4f12-91a0-7b438c4ebe57.png" width="500" height="400"/>
 
 
 # References
